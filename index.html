@@ -1,0 +1,567 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Theo dõi nhiệm vụ Nghị quyết 57 - UBND xã Bến Hải</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap">
+<style>
+  /* Bố cục: dải tiêu đề màu chủ đạo → ô số liệu → hai cột quá hạn / sắp đến hạn → bảng theo đơn vị → đã hoàn thành */
+  :root{
+    --bg:#f2f4f8; --card:#ffffff; --text:#1b2333; --muted:#5d6879; --line:#dfe4ee; --th:#eaf0fa; --th-text:#123a6b; --zebra:#f9fafc;
+    --brand:#0b4ea2; --brand-dark:#083a7a; --on-brand:#ffffff;
+    --red:#c0392b; --red-bg:#fbeaea;
+    --amber:#a85f00; --amber-bg:#fff2dc;
+    --green:#1b7a3a; --green-bg:#e6f4ea;
+    --blue:#1f5fbf; --blue-bg:#e6eefb;
+    --gray:#5d6879; --gray-bg:#edf0f4; --gray-bar:#a3adbb;
+    --font:"Be Vietnam Pro","Segoe UI",Roboto,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+    --bg:#11161f; --card:#1a212d; --text:#e6eaf2; --muted:#9aa5b6; --line:#2c3545; --th:#212b3b; --th-text:#cfdcf2; --zebra:#1d2531;
+    --brand:#1b5fb8; --brand-dark:#0f3f80; --on-brand:#ffffff;
+    --red:#f08378; --red-bg:#3a1f1f; --amber:#f0b45c; --amber-bg:#3a2c16;
+    --green:#6fcf8f; --green-bg:#17301f; --blue:#8bb4f5; --blue-bg:#1a2a45;
+    --gray:#a9b3c2; --gray-bg:#262e3b; --gray-bar:#6b7585; color-scheme:dark } }
+  :root[data-theme="dark"]{
+    --bg:#11161f; --card:#1a212d; --text:#e6eaf2; --muted:#9aa5b6; --line:#2c3545; --th:#212b3b; --th-text:#cfdcf2; --zebra:#1d2531;
+    --brand:#1b5fb8; --brand-dark:#0f3f80; --on-brand:#ffffff;
+    --red:#f08378; --red-bg:#3a1f1f; --amber:#f0b45c; --amber-bg:#3a2c16;
+    --green:#6fcf8f; --green-bg:#17301f; --blue:#8bb4f5; --blue-bg:#1a2a45;
+    --gray:#a9b3c2; --gray-bg:#262e3b; --gray-bar:#6b7585; color-scheme:dark }
+  *{box-sizing:border-box}
+  [hidden]{display:none!important}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.5}
+  a{color:var(--brand)}
+  .wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+  header{background:linear-gradient(135deg,var(--brand),var(--brand-dark));color:var(--on-brand)}
+  header .wrap{padding-block:18px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .org{font-size:12.5px;letter-spacing:.08em;opacity:.85;text-transform:uppercase;font-weight:600}
+  h1{margin:2px 0 4px;font-size:clamp(19px,3vw,24px);text-wrap:balance}
+  .sub{font-size:13px;opacity:.92}
+  .actions{display:flex;flex-wrap:wrap;gap:8px}
+  .btn{font-family:inherit;border:1px solid rgba(255,255,255,.55);background:rgba(255,255,255,.12);color:var(--on-brand);padding:8px 14px;border-radius:8px;cursor:pointer;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+  .btn:hover{background:rgba(255,255,255,.24)}
+  .btn:focus-visible,.kpi:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+  .btn.light{border-color:var(--line);background:var(--card);color:var(--brand)}
+  main.wrap{padding-block:20px 40px}
+  .notice{padding:10px 14px;border-radius:8px;margin-bottom:14px;font-size:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .notice.info{background:var(--blue-bg);color:var(--text);border:1px solid var(--line)}
+  .notice.warn{background:var(--amber-bg);color:var(--text);border:1px solid var(--line)}
+  .notice.err{background:var(--red-bg);color:var(--text);border:1px solid var(--line)}
+  .kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:16px}
+  .kpi{background:var(--card);border-radius:12px;padding:14px 16px;border:1px solid var(--line);border-top:4px solid var(--gray);cursor:pointer;text-align:left;font-family:inherit;color:var(--text);transition:transform .1s,box-shadow .1s}
+  .kpi:hover{transform:translateY(-2px);box-shadow:0 4px 14px rgba(0,0,0,.08)}
+  .kpi .lb{font-size:13px;color:var(--muted);font-weight:600}
+  .kpi .val{font-size:32px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+  .kpi .note{font-size:12px;color:var(--muted)}
+  .kpi.total{border-top-color:var(--brand)} .kpi.total .val{color:var(--brand)}
+  .kpi.done{border-top-color:var(--green)} .kpi.done .val{color:var(--green)}
+  .kpi.over{border-top-color:var(--red)} .kpi.over .val{color:var(--red)}
+  .kpi.soon{border-top-color:var(--amber)} .kpi.soon .val{color:var(--amber)}
+  .kpi.ok{border-top-color:var(--blue)} .kpi.ok .val{color:var(--blue)}
+  .kpi.nodl .val{color:var(--gray)}
+  .bar{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--gray-bg);margin:4px 0 8px}
+  .bar span{display:block;height:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12.5px;color:var(--muted)}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:middle}
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;min-width:0}
+  .panel h2{font-size:16.5px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .panel h2 .count{font-size:13px;padding:2px 9px;border-radius:999px}
+  .grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .item{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+  .item:first-child{border-top:0}
+  .item .tag{flex:0 0 auto;min-width:96px;text-align:center;font-weight:700;font-size:13px;padding:6px 8px;border-radius:8px;align-self:flex-start}
+  .item>div:last-child{min-width:0}
+  .item .so{font-weight:600;font-size:14px}
+  .item .ty{font-size:14px}
+  .item .meta{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .empty{color:var(--muted);font-size:14px;font-style:italic;padding:6px 0}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{border:1px solid var(--line);padding:8px 9px;vertical-align:top;text-align:left}
+  th{background:var(--th);color:var(--th-text);font-weight:700;position:sticky;top:0;z-index:1}
+  td.c{text-align:center;font-variant-numeric:tabular-nums}
+  tbody tr:nth-child(even){background:var(--zebra)}
+  .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:12.5px;font-weight:600;white-space:nowrap}
+  .s-over{background:var(--red-bg);color:var(--red)}
+  .s-soon{background:var(--amber-bg);color:var(--amber)}
+  .s-ok{background:var(--blue-bg);color:var(--blue)}
+  .s-done{background:var(--green-bg);color:var(--green)}
+  .s-nodl{background:var(--gray-bg);color:var(--gray)}
+  .num-over{color:var(--red);font-weight:700}
+  .num-soon{color:var(--amber);font-weight:700}
+  .num-done{color:var(--green);font-weight:700}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+  .toolbar select,.toolbar input{font-family:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:var(--card);color:var(--text);max-width:100%}
+  .toolbar input{min-width:0;flex:1 1 220px}
+  .tbl-wrap{overflow:auto;max-height:72vh;border-radius:8px}
+  .sheet-title{text-align:center;margin:0 0 4px;font-size:16.5px;font-weight:700;text-transform:uppercase;text-wrap:balance}
+  .sheet-period{text-align:center;margin:0 0 14px;font-style:italic;color:var(--muted)}
+  .loading{padding:60px 0;text-align:center;color:var(--muted)}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding-block:10px}
+  .visits{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
+  .visits .vl{font-size:13px;color:var(--muted);font-weight:600}
+  .visits .vv{font-size:26px;font-weight:700;color:var(--brand);font-variant-numeric:tabular-nums}
+  @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  @media (max-width:760px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
+  @media (prefers-reduced-motion:reduce){.kpi{transition:none}.kpi:hover{transform:none}}
+</style>
+<style>
+  .grp-row td{background:var(--th);color:var(--th-text);font-weight:700;text-transform:uppercase;font-size:13.5px;letter-spacing:.02em}
+  .grp-row td .grp-meta{font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted);margin-left:8px}
+  .chip{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--gray-bg);color:var(--gray);margin-left:6px;vertical-align:1px}
+
+  /* ===== Giao diện điện thoại: bảng chuyển thành thẻ, không phải kéo ngang (máy tính giữ nguyên) ===== */
+  @media (max-width:760px){
+    .tbl-wrap{max-height:none;overflow:visible}
+    .toolbar select{flex:1 1 100%}
+    .toolbar .btn.light{flex:1 1 100%;justify-content:center}
+    .panel{padding:14px 12px}
+    table.rt, table.rt tbody, table.rt tr, table.rt td{display:block;width:100%}
+    table.rt thead{display:none}
+    table.rt tbody{display:flex;flex-direction:column;gap:10px}
+    table.rt tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--card)}
+    table.rt tbody tr:nth-child(even){background:var(--card)}
+    table.rt td{border:0;padding:0;grid-column:1 / -1;display:grid;grid-template-columns:38% minmax(0,1fr);gap:8px;text-align:left;overflow-wrap:anywhere}
+    table.rt td::before{content:attr(data-label);color:var(--muted);font-size:12.5px;font-weight:600}
+    table.rt td.rt-blank, table.rt td.rt-hide{display:none}
+    table.rt td.rt-title{grid-column:1;display:block;font-weight:700;font-size:15px}
+    table.rt td.rt-status{grid-column:2;grid-row:1;display:block;text-align:right}
+    table.rt td.rt-sub{display:block}
+    table.rt td.rt-title::before, table.rt td.rt-status::before, table.rt td.rt-sub::before{display:none}
+    table.rt tr.rt-full{display:block}
+    table.rt tr.rt-full td{display:block}
+    table.rt tr.rt-full td::before{display:none}
+    table.rt tr.grp-row{background:var(--th);border-color:var(--th);margin-top:6px}
+    table.rt tr.grp-row td{background:transparent}
+    .grp-row td .grp-meta{display:block;margin:4px 0 0}
+    table.rt tr.rt-full:not(.grp-row){border-style:dashed}
+    /* Bảng thống kê: mỗi dòng là một thẻ, các chỉ số xếp 3 cột */
+    table.rt.stat tr{grid-template-columns:repeat(3,minmax(0,1fr))}
+    table.rt.stat td{grid-column:auto;display:flex;flex-direction:column;gap:0}
+    table.rt.stat td::before{font-size:11.5px;font-weight:500}
+    table.rt.stat td .v{font-size:16px;font-weight:600}
+    table.rt.stat td.rt-title{grid-column:1 / -1}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <div class="org">Ủy ban nhân dân xã Bến Hải</div>
+      <h1>Theo dõi nhiệm vụ Nghị quyết 57 - UBND xã Bến Hải</h1>
+      <div class="sub" id="subline">Đang tải dữ liệu...</div>
+    </div>
+    <nav class="actions">
+      <a class="btn" href="#tong-hop">Tổng hợp</a>
+      <a class="btn" href="#chi-tiet">Xem chi tiết</a>
+      <button class="btn" id="btnReload" type="button">Tải lại dữ liệu</button>
+      <a class="btn" id="btnSheet" target="_blank" rel="noopener">Mở bảng Google Sheet</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="loading" class="loading">Đang tải dữ liệu từ bảng theo dõi...</div>
+
+  <section id="viewSummary" hidden>
+    <div class="kpis" id="kpis"></div>
+    <div class="panel">
+      <h2>Cơ cấu tình hình thực hiện</h2>
+      <div class="bar" id="bar"></div>
+      <div class="legend" id="legend"></div>
+    </div>
+    <div class="grid2">
+      <div class="panel">
+        <h2>Nhiệm vụ quá hạn <span class="count s-over" id="cOver"></span></h2>
+        <div id="listOver"></div>
+      </div>
+      <div class="panel">
+        <h2>Nhiệm vụ sắp đến hạn <span class="count s-soon" id="cSoon"></span></h2>
+        <div id="listSoon"></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2>Tình hình thực hiện theo đơn vị</h2>
+      <div class="tbl-wrap"><table id="tblUnit"></table></div>
+    </div>
+    <div class="panel">
+      <h2>Nhiệm vụ đã hoàn thành <span class="count s-done" id="cDone"></span></h2>
+      <div id="listDone"></div>
+    </div>
+  </section>
+
+  <section id="viewDetail" hidden>
+    <div class="panel">
+      <p class="sheet-title">Bảng theo dõi chi tiết nhiệm vụ</p>
+      <p class="sheet-period" id="dPeriod"></p>
+      <div class="toolbar">
+        <select id="fStatus" aria-label="Lọc theo trạng thái">
+          <option value="">Tất cả trạng thái</option>
+          <option>Quá hạn</option>
+          <option>Sắp đến hạn</option>
+          <option>Trong hạn</option>
+          <option>Đã hoàn thành</option>
+          <option>Chưa xác định hạn</option>
+        </select>
+        <select id="fUnit" aria-label="Lọc theo đơn vị"><option value="">Tất cả đơn vị thực hiện</option></select>
+        <input id="fSearch" type="search" placeholder="Tìm theo số ký hiệu, trích yếu, đơn vị..." aria-label="Tìm kiếm">
+        <a class="btn light" href="#tong-hop">← Về trang tổng hợp</a>
+      </div>
+      <div class="tbl-wrap"><table id="tblDetail"></table></div>
+      <div style="color:var(--muted);margin-top:8px;font-size:13px" id="dCount"></div>
+    </div>
+  </section>
+
+  <div id="notices"></div>
+
+  <div class="panel">
+    <h2>Thống kê truy cập</h2>
+    <div class="visits">
+      <div><div class="vl">Tổng số lượt truy cập</div><div class="vv" id="visitTotal">…</div></div>
+    </div>
+  </div>
+</main>
+<footer class="wrap" id="footer"></footer>
+
+<script>
+/* ================== CẤU HÌNH ================== */
+const CONFIG = {
+  SHEET_ID: "1dGuvXpR1HSk6P-S_GujVr2Nuo1KFOMvsoAnLlMtp3ZU",
+  /* sheet: tên trang tính (phải trùng tên tab trong Google Sheet).
+     gid  : số sau "#gid=" trên thanh địa chỉ khi bấm vào tab đó (nên điền để đọc ngày chính xác). */
+  SHEET: { sheet: "Theo dõi", gid: "473044175" },
+  SAP_DEN_HAN_NGAY: 2,  // còn từ 0 đến 2 ngày thì tính là "Sắp đến hạn"
+  /* Bộ đếm lượt truy cập (dịch vụ miễn phí abacus.jasoncameron.dev).
+     Mỗi lần mở trình duyệt chỉ tính 1 lượt, bấm tải lại trang không tính thêm. */
+  COUNTER: { ns: "ubnd-benhai-nq57", key: "luot-truy-cap" }
+};
+
+/* ================== TIỆN ÍCH ================== */
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm = s => String(s ?? "").normalize("NFC").replace(/\s+/g, " ").trim().toLowerCase();
+const DAY = 86400000;
+const today = (() => { const d = new Date(); d.setHours(0,0,0,0); return d; })();
+const fmt = d => d ? `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}/${d.getFullYear()}` : "";
+const fmtTime = d => `${String(d.getHours()).padStart(2,"0")}:${String(d.getMinutes()).padStart(2,"0")} ngày ${fmt(d)}`;
+
+function parseCSV(text){
+  const rows = []; let row = [], cell = "", q = false;
+  text = text.replace(/^﻿/, "");
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"'){ if (text[i+1] === '"'){ cell += '"'; i++; } else q = false; }
+      else cell += c;
+    } else if (c === '"') q = true;
+    else if (c === ",") { row.push(cell); cell = ""; }
+    else if (c === "\n" || c === "\r"){
+      if (c === "\r" && text[i+1] === "\n") i++;
+      row.push(cell); rows.push(row); row = []; cell = "";
+    } else cell += c;
+  }
+  if (cell !== "" || row.length){ row.push(cell); rows.push(row); }
+  return rows;
+}
+
+/* Ngày trong bảng có thể ghi ngày/tháng hoặc tháng/ngày: khi không phân biệt được, chọn cách đọc hợp lý nhất. */
+function dateCandidates(raw){
+  const s = String(raw ?? "").trim();
+  if (!s) return [];
+  if (/^\d{5}(\.\d+)?$/.test(s)){ const n = Math.floor(+s); if (n > 40000 && n < 60000){ const t = new Date(1899, 11, 30); t.setDate(t.getDate() + n); return [t]; } }
+  let m = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+  if (m) return [new Date(+m[1], +m[2]-1, +m[3])];
+  m = s.match(/(\d{1,2})[\/\.\-](\d{1,2})[\/\.\-](\d{4})/);
+  if (!m) return [];
+  const a = +m[1], b = +m[2], y = +m[3], out = [];
+  const mk = (d, mo) => { if (mo>=1 && mo<=12 && d>=1 && d<=31){ const t = new Date(y, mo-1, d); if (t.getMonth() === mo-1) out.push(t); } };
+  mk(a, b); if (a !== b) mk(b, a);
+  return out;
+}
+const pickNearest = (c, ref) => c.slice().sort((x,y) => Math.abs(x-ref) - Math.abs(y-ref))[0] || null;
+const parseIssueDate = raw => pickNearest(dateCandidates(raw), today);
+function parseDeadline(raw, issue){
+  const c = dateCandidates(raw);
+  if (!c.length) return null;
+  if (c.length === 1) return c[0];
+  if (issue){ const after = c.filter(d => d >= issue); if (after.length) return pickNearest(after, issue); }
+  return pickNearest(c, today);
+}
+
+/* ================== ĐỌC BẢNG ================== */
+const COLS = {
+  stt: h => h === "stt",
+  so: h => h.includes("số ký hiệu"),
+  trich: h => h.includes("trích yếu"),
+  dvbh: h => h.includes("đơn vị ban hành"),
+  ngay: h => h.includes("ngày ban hành"),
+  khan: h => h.includes("độ khẩn"),
+  han: h => h.includes("hạn xử lý"),
+  dvth: h => h.includes("đơn vị thực hiện"),
+  kq: h => /(kết|kế) quả/.test(h) && !h.includes("chi tiết"),
+  ct: h => h.includes("chi tiết"),
+  ghichu: h => h.includes("ghi chú") || h.includes("chỉ tiêu")
+};
+
+function extract(grid){
+  const hIdx = grid.findIndex(r => r.some(c => norm(c).includes("số ký hiệu")));
+  if (hIdx < 0) return null;
+  const header = grid[hIdx].map(norm);
+  const map = {};
+  for (const k in COLS) map[k] = header.findIndex(COLS[k]);
+  const pre = grid.slice(0, hIdx).map(r => r.filter(c => String(c).trim()).join(" ").trim()).filter(Boolean);
+  const get = (r, k) => map[k] >= 0 ? String(r[map[k]] ?? "").replace(/\s+/g, " ").trim() : "";
+  const rows = []; let sub = "";
+  for (const r of grid.slice(hIdx + 1)){
+    const filled = r.map(c => String(c).trim()).filter(Boolean);
+    if (!filled.length) continue;
+    if (!get(r,"so") && !get(r,"trich")){ if (filled.length === 1) sub = filled[0]; continue; }
+    rows.push({
+      stt: get(r,"stt"), so: get(r,"so"), trich: get(r,"trich"), dvbh: get(r,"dvbh"),
+      ngayRaw: get(r,"ngay"), khan: get(r,"khan"), hanRaw: get(r,"han"),
+      dvth: get(r,"dvth") || sub || "Chưa phân công", kq: get(r,"kq"), ct: get(r,"ct"), ghichu: get(r,"ghichu")
+    });
+  }
+  const noteLabel = map.ghichu >= 0 ? String(grid[hIdx][map.ghichu]).trim() : "Ghi chú";
+  return { title: pre[0] || "", period: pre[1] || "", hasCt: map.ct >= 0, noteLabel, rows };
+}
+
+const notDone = k => !k || /^(chưa|đang|không có thời hạn)/.test(norm(k));
+function classify(r){
+  r.ngay = parseIssueDate(r.ngayRaw);
+  r.han = parseDeadline(r.hanRaw, r.ngay);
+  r.hanLoi = !!r.hanRaw && !r.han;
+  if (!notDone(r.kq)) { r.status = "Đã hoàn thành"; r.days = null; return r; }
+  if (!r.han){ r.status = "Chưa xác định hạn"; r.days = null; return r; }
+  r.days = Math.round((r.han - today) / DAY);
+  r.status = r.days < 0 ? "Quá hạn" : (r.days <= CONFIG.SAP_DEN_HAN_NGAY ? "Sắp đến hạn" : "Trong hạn");
+  return r;
+}
+const STATUS = {
+  "Quá hạn": { cls:"s-over", color:"var(--red)" },
+  "Sắp đến hạn": { cls:"s-soon", color:"var(--amber)" },
+  "Trong hạn": { cls:"s-ok", color:"var(--blue)" },
+  "Đã hoàn thành": { cls:"s-done", color:"var(--green)" },
+  "Chưa xác định hạn": { cls:"s-nodl", color:"var(--gray-bar)" }
+};
+const badge = s => `<span class="badge ${STATUS[s].cls}">${esc(s)}</span>`;
+
+/* ================== NGUỒN DỮ LIỆU ================== */
+/* Đọc trực tiếp Google Sheet mỗi lần mở trang.
+   Yêu cầu: bảng tính chia sẻ ở chế độ "Bất kỳ ai có đường liên kết đều có thể xem". */
+async function fetchCsv(url){
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("HTTP " + res.status);
+  const text = await res.text();
+  if (/^\s*<(!doctype|html)/i.test(text)) throw new Error("bảng tính chưa được chia sẻ công khai");
+  return text;
+}
+const hasHeader = r => (r || []).some(c => norm(c).includes("số ký hiệu"));
+async function loadSheet(g){
+  const base = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}`;
+  // 1) Có gid: tải bản xuất CSV, giữ đúng giá trị hiển thị trong ô
+  if (g.gid){
+    try { const d = extract(parseCSV(await fetchCsv(`${base}/export?format=csv&gid=${g.gid}`))); if (d) return d; } catch(_){}
+  }
+  // 2) Đọc theo tên trang tính.
+  //    Lần 1 đọc cả trang để tìm dòng tiêu đề; lần 2 khai báo các dòng tiêu đề (headers=k)
+  //    để Google chỉ xét kiểu dữ liệu trên các dòng nhiệm vụ, không làm mất ô ngày.
+  const q = k => `${base}/gviz/tq?tqx=out:csv&headers=${k}&sheet=${encodeURIComponent(g.sheet)}`;
+  const grid = parseCSV(await fetchCsv(q(0)));
+  const hIdx = grid.findIndex(hasHeader);
+  if (hIdx < 0) throw new Error("không tìm thấy dòng tiêu đề “Số ký hiệu”");
+  const pre = grid.slice(0, hIdx), headerRow = grid[hIdx];
+  for (const k of [hIdx + 1, hIdx + 2, hIdx + 3, hIdx + 4]){
+    try {
+      const g2 = parseCSV(await fetchCsv(q(k)));
+      if (!hasHeader(g2[0])) continue;              // chưa bao trùm dòng tiêu đề → thử số dòng lớn hơn
+      const d = extract([...pre, headerRow, ...g2.slice(1)]);
+      if (d){ d.viaName = true; return d; }
+    } catch(_){}
+  }
+  const d = extract(grid); d.viaName = true; return d;
+}
+
+let DATA = null, ERRORS = [], LOADED_AT = null;
+
+async function loadAll(){
+  const s = CONFIG.SHEET;
+  try {
+    const d = await loadSheet(s);
+    if (!d) throw new Error("không tìm thấy dòng tiêu đề “Số ký hiệu”");
+    d.rows.forEach(classify);
+    const datesLost = !!d.rows.length && !!d.viaName && !d.rows.some(r => r.ngayRaw || r.hanRaw);
+    return { ok: true, rows: d.rows, errors: [], datesLost, hasCt: d.hasCt, noteLabel: d.noteLabel };
+  } catch(e){
+    return { ok: false, rows: [], errors: [`Trang tính “${s.sheet}”: ${e?.message || "lỗi kết nối"}`] };
+  }
+}
+
+/* ================== THỐNG KÊ TRUY CẬP ================== */
+async function loadVisits(){
+  const { ns, key } = CONFIG.COUNTER;
+  let counted = false;
+  try { counted = sessionStorage.getItem("daTinhLuot") === "1"; } catch(_){}
+  try {
+    const res = await fetch(`https://abacus.jasoncameron.dev/${counted ? "get" : "hit"}/${ns}/${key}`, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const { value } = await res.json();
+    if (!counted) try { sessionStorage.setItem("daTinhLuot", "1"); } catch(_){}
+    $("visitTotal").textContent = Number(value).toLocaleString("vi-VN");
+  } catch(_){
+    $("visitTotal").textContent = "Chưa kết nối được";
+  }
+}
+
+/* ================== HIỂN THỊ ================== */
+function renderNotices(){
+  const n = [];
+  if (ERRORS.length) n.push(`<div class="notice err"><span><b>Chưa đọc được dữ liệu từ Google Sheet:</b><br>${ERRORS.map(esc).join("<br>")}<br>Đề nghị kiểm tra: bảng tính đã chia sẻ ở chế độ “Bất kỳ ai có đường liên kết đều có thể xem”, tên trang tính trong phần cấu hình trùng với tên tab, máy đang có kết nối Internet.</span></div>`);
+  if (DATA && DATA.datesLost) n.push(`<div class="notice warn">Các cột ngày bị trống khi đọc. Đề nghị điền mã <b>gid</b> của trang tính trong phần cấu hình tệp index.html.</div>`);
+  const bad = DATA ? DATA.rows.filter(r => r.hanLoi) : [];
+  if (bad.length) n.push(`<div class="notice warn">Có ${bad.length} nhiệm vụ ghi hạn xử lý không đọc được ngày cụ thể, đang xếp vào nhóm “Chưa xác định hạn”: ${bad.map(r => `<b>${esc(r.so)}</b> (“${esc(r.hanRaw)}”)`).join("; ")}.</div>`);
+  $("notices").innerHTML = n.join("");
+}
+
+function fillSelect(id, values, label){
+  const cur = $(id).value;
+  $(id).innerHTML = `<option value="">${label}</option>` + values.map(v => `<option${v === cur ? " selected" : ""}>${esc(v)}</option>`).join("");
+}
+
+function render(){
+  fillSelect("fUnit", [...new Set(DATA.rows.map(r => r.dvth))].sort((a,b) => a.localeCompare(b, "vi")), "Tất cả đơn vị thực hiện");
+  $("subline").textContent = `Số liệu tính đến ngày ${fmt(today)} · Cập nhật lúc ${fmtTime(LOADED_AT)}`;
+  $("dPeriod").textContent = `Số liệu tính đến ngày ${fmt(today)}`;
+  $("footer").textContent = `Trạng thái được tính tự động theo cột “Hạn xử lý” và cột “Kết quả thực hiện”. “Sắp đến hạn”: còn từ 0 đến ${CONFIG.SAP_DEN_HAN_NGAY} ngày.`;
+  renderSummary(); renderNotices();
+  $("loading").hidden = true;
+  route(false);
+}
+
+const countBy = rs => { const c = s => rs.filter(r => r.status === s).length; return { t: rs.length, d: c("Đã hoàn thành"), o: c("Quá hạn"), s: c("Sắp đến hạn"), k: c("Trong hạn"), x: c("Chưa xác định hạn") }; };
+const z = (v, cls) => v ? `<span class="${cls}">${v}</span>` : "0";
+const rate = x => x.t ? (Math.round(x.d*1000/x.t)/10) + "%" : "—";
+const statHead = first => `<thead><tr><th>${first}</th><th>Tổng số</th><th>Đã hoàn thành</th><th>Quá hạn</th><th>Sắp đến hạn</th><th>Trong hạn</th><th>Chưa xác định hạn</th><th>Tỷ lệ hoàn thành</th></tr></thead>`;
+const statCells = x => `<td class="c">${x.t}</td><td class="c">${z(x.d,"num-done")}</td><td class="c">${z(x.o,"num-over")}</td><td class="c">${z(x.s,"num-soon")}</td><td class="c">${x.k}</td><td class="c">${x.x}</td><td class="c">${rate(x)}</td>`;
+
+function renderSummary(){
+  const rows = DATA.rows, n = rows.length, all = countBy(rows);
+  const pct = v => n ? Math.round(v * 1000 / n) / 10 : 0;
+
+  $("kpis").innerHTML = [
+    ["total","Tổng số nhiệm vụ", n, "Theo bảng theo dõi Nghị quyết 57", ""],
+    ["done","Đã hoàn thành", all.d, `Tỷ lệ hoàn thành ${pct(all.d)}%`, "Đã hoàn thành"],
+    ["over","Quá hạn", all.o, "Chưa hoàn thành, đã qua hạn xử lý", "Quá hạn"],
+    ["soon","Sắp đến hạn", all.s, `Còn từ 0 đến ${CONFIG.SAP_DEN_HAN_NGAY} ngày`, "Sắp đến hạn"],
+    ["ok","Trong hạn", all.k, `Còn trên ${CONFIG.SAP_DEN_HAN_NGAY} ngày`, "Trong hạn"],
+    ["nodl","Chưa xác định hạn", all.x, "Không ghi hạn xử lý cụ thể", "Chưa xác định hạn"]
+  ].map(([c,l,v,note,f]) => `<button type="button" class="kpi ${c}" data-f="${esc(f)}"><div class="lb">${l}</div><div class="val">${v}</div><div class="note">${note}</div></button>`).join("");
+  document.querySelectorAll(".kpi").forEach(el => el.onclick = () => openDetail({ status: el.dataset.f }));
+
+  const parts = [["Đã hoàn thành",all.d],["Quá hạn",all.o],["Sắp đến hạn",all.s],["Trong hạn",all.k],["Chưa xác định hạn",all.x]];
+  $("bar").innerHTML = parts.filter(p => p[1]).map(([s,v]) => `<span title="${s}: ${v}" style="width:${v*100/n}%;background:${STATUS[s].color}"></span>`).join("");
+  $("legend").innerHTML = parts.map(([s,v]) => `<span><i style="background:${STATUS[s].color}"></i>${s}: <b>${v}</b> (${pct(v)}%)</span>`).join("");
+
+  const item = (r, cls, tag) => `<div class="item"><div class="tag ${cls}">${tag}</div><div>
+      <div class="so">${esc(r.so)}</div><div class="ty">${esc(r.trich)}</div>
+      <div class="meta">Đơn vị thực hiện: <b>${esc(r.dvth)}</b> · Đơn vị ban hành: ${esc(r.dvbh || "—")} · Hạn xử lý: <b>${fmt(r.han) || esc(r.hanRaw)}</b>${r.khan && norm(r.khan) !== "thường" ? ` · Độ khẩn: <b style="color:var(--red)">${esc(r.khan)}</b>` : ""}</div>
+    </div></div>`;
+
+  const overL = rows.filter(r => r.status === "Quá hạn").sort((a,b) => a.days - b.days);
+  $("cOver").textContent = overL.length;
+  $("listOver").innerHTML = overL.length ? overL.map(r => item(r, "s-over", `Quá ${-r.days} ngày`)).join("") : `<div class="empty">Không có nhiệm vụ quá hạn.</div>`;
+
+  const soonL = rows.filter(r => r.status === "Sắp đến hạn").sort((a,b) => a.days - b.days);
+  $("cSoon").textContent = soonL.length;
+  $("listSoon").innerHTML = soonL.length ? soonL.map(r => item(r, "s-soon", r.days === 0 ? "Hết hạn hôm nay" : `Còn ${r.days} ngày`)).join("") : `<div class="empty">Không có nhiệm vụ sắp đến hạn trong ${CONFIG.SAP_DEN_HAN_NGAY} ngày tới.</div>`;
+
+  const doneL = rows.filter(r => r.status === "Đã hoàn thành");
+  $("cDone").textContent = doneL.length;
+  $("listDone").innerHTML = doneL.length ? `<div class="tbl-wrap"><table><thead><tr><th>Số ký hiệu</th><th>Trích yếu</th><th>Đơn vị thực hiện</th><th>Hạn xử lý</th><th>Chi tiết kết quả thực hiện</th></tr></thead><tbody>${
+      doneL.map(r => `<tr><td>${esc(r.so)}</td><td>${esc(r.trich)}</td><td>${esc(r.dvth)}</td><td class="c">${fmt(r.han) || esc(r.hanRaw)}</td><td>${esc(r.ct)}</td></tr>`).join("")
+    }</tbody></table></div>` : `<div class="empty">Chưa có nhiệm vụ hoàn thành.</div>`;
+
+  // Theo đơn vị
+  const units = [...new Set(rows.map(r => r.dvth))];
+  const uRows = units.map(u => ({ u, ...countBy(rows.filter(r => r.dvth === u)) })).sort((a,b) => b.o - a.o || b.s - a.s || b.t - a.t);
+  $("tblUnit").innerHTML = statHead("Đơn vị thực hiện") + `<tbody>${
+    uRows.map(x => `<tr><td><a href="#chi-tiet" data-u="${esc(x.u)}">${esc(x.u)}</a></td>${statCells(x)}</tr>`).join("") || `<tr><td colspan="8" class="c empty">Chưa có dữ liệu.</td></tr>`
+  }</tbody>`;
+  $("tblUnit").querySelectorAll("a[data-u]").forEach(a => a.onclick = e => { e.preventDefault(); openDetail({ unit: a.dataset.u }); });
+  mobilize($("tblUnit"), "stat");
+  mobilize($("listDone").querySelector("table"), "list");
+}
+
+/* Gắn nhãn cột cho từng ô để trên điện thoại hiển thị dạng thẻ (không ảnh hưởng giao diện máy tính) */
+function mobilize(table, kind){
+  if (!table) return;
+  table.classList.add("rt", kind);
+  const heads = [...table.querySelectorAll("thead th")].map(th => th.textContent.trim());
+  const titleIdx = heads.includes("Số ký hiệu") ? heads.indexOf("Số ký hiệu") : 0;
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    const tds = [...tr.children];
+    if (tds.length === 1){ tr.classList.add("rt-full"); return; }
+    tds.forEach((td, i) => {
+      const h = heads[i] || "";
+      td.setAttribute("data-label", h);
+      if (i === titleIdx){ td.classList.add("rt-title"); return; }
+      if (h === "Trạng thái") td.classList.add("rt-status");
+      else if (h === "Trích yếu") td.classList.add("rt-sub");
+      else if (h === "STT") td.classList.add("rt-hide");
+      if (!td.textContent.trim()) td.classList.add("rt-blank");
+      td.innerHTML = `<span class="v">${td.innerHTML}</span>`;
+    });
+  });
+}
+
+function renderDetail(){
+  const fS = $("fStatus").value, fU = $("fUnit").value, q = norm($("fSearch").value);
+  const ct = DATA.hasCt, cols = ct ? 12 : 11;
+  const match = r => (!fS || r.status === fS) && (!fU || r.dvth === fU) &&
+    (!q || norm([r.so, r.trich, r.dvbh, r.dvth, r.kq, r.ct, r.ghichu].join(" ")).includes(q));
+  const list = DATA.rows.filter(match), shown = list.length;
+  const body = list.map(r => `<tr>
+      <td class="c">${esc(r.stt)}</td><td>${esc(r.so)}</td><td>${esc(r.trich)}</td><td>${esc(r.dvbh)}</td>
+      <td class="c">${fmt(r.ngay) || esc(r.ngayRaw)}</td><td class="c">${esc(r.khan)}</td>
+      <td class="c">${fmt(r.han) || esc(r.hanRaw)}${r.status === "Quá hạn" ? `<br><small class="num-over">quá ${-r.days} ngày</small>` : r.status === "Sắp đến hạn" ? `<br><small class="num-soon">${r.days === 0 ? "hết hạn hôm nay" : "còn " + r.days + " ngày"}</small>` : ""}</td>
+      <td>${esc(r.dvth)}</td><td>${esc(r.kq)}</td>${ct ? `<td>${esc(r.ct)}</td>` : ""}<td>${esc(r.ghichu)}</td><td class="c">${badge(r.status)}</td>
+    </tr>`).join("") || `<tr><td colspan="${cols}" class="c empty">Không có nhiệm vụ phù hợp điều kiện lọc.</td></tr>`;
+  $("tblDetail").innerHTML = `<thead><tr><th>STT</th><th>Số ký hiệu</th><th>Trích yếu</th><th>Đơn vị ban hành</th><th>Ngày ban hành</th><th>Độ khẩn</th><th>Hạn xử lý</th><th>Đơn vị thực hiện</th><th>Kết quả thực hiện</th>${ct ? "<th>Chi tiết kết quả thực hiện</th>" : ""}<th>${esc(DATA.noteLabel || "Ghi chú")}</th><th>Trạng thái</th></tr></thead><tbody>${body}</tbody>`;
+  $("dCount").textContent = `Hiển thị ${shown}/${DATA.rows.length} nhiệm vụ.`;
+  mobilize($("tblDetail"), "list");
+}
+
+function openDetail({ status = "", unit = "" } = {}){
+  $("fStatus").value = status; $("fUnit").value = unit; $("fSearch").value = "";
+  if (location.hash === "#chi-tiet") renderDetail(); else location.hash = "chi-tiet";
+}
+function route(scroll = true){
+  if (!DATA) return;
+  const detail = location.hash === "#chi-tiet";
+  $("viewSummary").hidden = detail;
+  $("viewDetail").hidden = !detail;
+  if (detail) renderDetail();
+  if (scroll) window.scrollTo(0, 0);
+}
+
+async function init(){
+  $("btnReload").disabled = true;
+  const d = await loadAll();
+  ERRORS = d.errors;
+  if (d.ok){ DATA = d; LOADED_AT = new Date(); render(); }
+  else { $("loading").hidden = true; renderNotices(); }
+  $("btnReload").disabled = false;
+}
+
+$("btnSheet").href = `https://docs.google.com/spreadsheets/d/${CONFIG.SHEET_ID}/edit`;
+$("btnReload").onclick = init;
+["fStatus","fUnit"].forEach(id => $(id).onchange = renderDetail);
+$("fSearch").oninput = renderDetail;
+window.addEventListener("hashchange", () => route(true));
+init();
+loadVisits();
+</script>
+</body>
+</html>
